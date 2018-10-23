@@ -4,7 +4,7 @@
 #include <string.h>
 
 char infile[1000], outfile[1000];
-long long if_embed = 1, out_dim = -1, n_samples = -1, n_threads = -1, n_negative = -1, n_neighbors = -1, n_trees = -1, n_propagation = -1;
+long long if_embed = 1, out_dim = -1, n_samples = -1, n_threads = -1, n_negative = -1, n_neighbors = -1, n_trees = -1, n_propagation = -1, seed = -1;
 real alpha = -1, n_gamma = -1, perplexity = -1;
 
 int ArgPos(char *str, int argc, char **argv) {
@@ -37,6 +37,7 @@ int main(int argc, char **argv)
         printf("-neigh: Number of neighbors (K) in K-NNG, which is usually set as three times of perplexity. Default is 150.\n");
         printf("-gamma: The weights assigned to negative edges. Default is 7.\n");
         printf("-perp: The perplexity used for deciding edge weights in K-NNG. Default is 50.\n");
+        printf("-seed: The random seed.\n");
         return 0;
     }
     if ((i = ArgPos((char *)"-fea", argc, argv)) > 0) if_embed = atoi(argv[i + 1]);
@@ -52,13 +53,14 @@ int main(int argc, char **argv)
 	if ((i = ArgPos((char *)"-alpha", argc, argv)) > 0) alpha = atof(argv[i + 1]);
 	if ((i = ArgPos((char *)"-gamma", argc, argv)) > 0) n_gamma = atof(argv[i + 1]);
 	if ((i = ArgPos((char *)"-perp", argc, argv)) > 0) perplexity = atof(argv[i + 1]);
+	if ((i = ArgPos((char *)"-seed", argc, argv)) > 0) seed = atoi(argv[i + 1]);
 
 	LargeVis model;
     if (if_embed)
         model.load_from_file(infile);
     else
         model.load_from_graph(infile);
-	model.run(out_dim, n_threads, n_samples, n_propagation, alpha, n_trees, n_negative, n_neighbors, n_gamma, perplexity);
+	model.run(out_dim, n_threads, n_samples, n_propagation, alpha, n_trees, n_negative, n_neighbors, n_gamma, perplexity, seed);
 
 	model.save(outfile);
 }

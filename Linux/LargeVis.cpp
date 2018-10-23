@@ -646,11 +646,12 @@ void LargeVis::visualize()
 	printf("\n");
 }
 
-void LargeVis::run(long long out_d, long long n_thre, long long n_samp, long long n_prop, real alph, long long n_tree, long long n_nega, long long n_neig, real gamm, real perp)
+void LargeVis::run(long long out_d, long long n_thre, long long n_samp, long long n_prop, real alph, long long n_tree, long long n_nega, long long n_neig, real gamm, real perp, long long seed)
 {
 	gsl_rng_env_setup();
 	gsl_T = gsl_rng_rand48;
 	gsl_r = gsl_rng_alloc(gsl_T);
+	seed = seed < 0 ? 314159265 : seed;
 	gsl_rng_set(gsl_r, 314159265);
 
 	clean_model();
